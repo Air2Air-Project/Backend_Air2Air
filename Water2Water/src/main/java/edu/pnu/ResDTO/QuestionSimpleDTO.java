@@ -1,4 +1,4 @@
-package edu.pnu.DTO;
+package edu.pnu.ResDTO;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ public class QuestionSimpleDTO {
 	private Date createdDate;
 	
 	public static QuestionSimpleDTO convertToDTO(QuestionBoard question) {
-		String type = question.getQuestionType().equals(QuestionType.VALVE) ? "계도율" 
+		String type = question.getQuestionType().equals(QuestionType.VALVE) ? "개도율" 
 				: question.getQuestionType().equals(QuestionType.ETC) ? "기타"
 				: question.getQuestionType().toString();
     	

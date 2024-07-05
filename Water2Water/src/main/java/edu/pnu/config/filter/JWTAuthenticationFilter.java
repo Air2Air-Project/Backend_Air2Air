@@ -15,7 +15,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.pnu.DTO.MemberDTO;
+import edu.pnu.ResDTO.MemberDTO;
 import edu.pnu.domain.Member;
 import edu.pnu.persistence.MemberRepository;
 import jakarta.servlet.FilterChain;

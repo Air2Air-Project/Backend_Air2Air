@@ -55,4 +55,12 @@ public class QuestionBoard {
 	@Column(nullable = false)
 	@Builder.Default
 	private QuestionType questionType = QuestionType.ETC;
+	
+	public static QuestionType stringToEnum(String type) {
+		QuestionType qtype = type.equals("개도율") ? QuestionType.VALVE
+				: type.equals("기타") ? QuestionType.ETC
+				: type.equals("ORP") ? QuestionType.ORP : QuestionType.PHP;
+		
+		return qtype;
+	}
 }
