@@ -8,5 +8,6 @@ import lombok.Data;
 @Builder
 public class MemberDTO {
 	private String username;
+	private String memberId;
 	private Role role;
 }

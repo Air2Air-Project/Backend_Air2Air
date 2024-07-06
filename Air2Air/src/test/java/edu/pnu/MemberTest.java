@@ -14,20 +14,36 @@ public class MemberTest {
 	@Autowired
 	public MemberRepository memberRepo;
 	
-//	@Test
+	@Test
 	public void addMember() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		Member mem = Member.builder()
-				.email("test@gmail.com")
+				.email("baejimil@naver.com")
 				.password(encoder.encode("1234"))
-				.username("test")
+				.username("baegimil")
+				.build();
+		
+		memberRepo.save(mem);
+		
+		mem = Member.builder()
+				.email("woojung@naver.com")
+				.password(encoder.encode("1234"))
+				.username("woojung")
+				.build();
+		
+		memberRepo.save(mem);
+		
+		mem = Member.builder()
+				.email("youngin@naver.com")
+				.password(encoder.encode("1234"))
+				.username("youngin")
 				.build();
 		
 		memberRepo.save(mem);
 	}
 	
-	@Test
+//	@Test
 	public void findByEmail() {		
 		Member mem = memberRepo.findByEmail("test@gmail.com").get();
 		System.out.println(mem);

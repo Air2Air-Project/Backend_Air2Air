@@ -17,9 +17,9 @@ public class QuestionSimpleDTO {
 	private Date createdDate;
 	
 	public static QuestionSimpleDTO convertToDTO(QuestionBoard question) {
-		String type = question.getQuestionType().equals(QuestionType.VALVE) ? "개도율" 
+		String type = question.getQuestionType().equals(QuestionType.STATION) ? "관측소" 
 				: question.getQuestionType().equals(QuestionType.ETC) ? "기타"
-				: question.getQuestionType().toString();
+				: question.getQuestionType().equals(QuestionType.ALERT) ? "알람" : "미세먼지";
     	
 		QuestionSimpleDTO dto = QuestionSimpleDTO.builder()
     			.seq(question.getSeq())

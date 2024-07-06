@@ -9,5 +9,5 @@ public class QuestionFormDTO {
 	private String type;
 	private String title;
 	private String content;
-	private String username;
+	private String memberId;
 }

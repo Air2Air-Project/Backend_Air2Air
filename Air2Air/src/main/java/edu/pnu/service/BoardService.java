@@ -35,7 +35,7 @@ public class BoardService {
 	}
 
 	public boolean addQuestion(QuestionFormDTO question) {
-		Member member = memberRepository.findByUsername(question.getUsername()).orElse(null);
+		Member member = memberRepository.findById(Long.parseLong(question.getMemberId())).orElse(null);
 
 		if (member == null)
 			return false;
@@ -52,12 +52,12 @@ public class BoardService {
 	}
 
 	public boolean addAnswer(AnswerFormDTO answer) {
-		Member member = memberRepository.findByUsername(answer.getUsername()).orElse(null);
+		Member member = memberRepository.findById(Long.parseLong(answer.getMeberId())).orElse(null);
 		if (member == null)
 			return false;
 		
 		QuestionBoard question = questionRepository.findById(Long.parseLong(answer.getQuestionId())).get();
-		if (question == null)
+		if (question == null || question.isAnswered())
 			return false;
 		
 		AnswerBoard answerBoard = AnswerBoard.builder()
@@ -67,6 +67,34 @@ public class BoardService {
 								.build();
 								
 		answerRepository.save(answerBoard);
+
+		return true;
+	}
+
+	public boolean deleteQuestion(String questionId, String memberId) {
+		Member member = memberRepository.findById(Long.parseLong(memberId)).orElse(null);
+		if (member == null)
+			return false;
+
+		QuestionBoard question = questionRepository.findById(Long.parseLong(questionId)).orElse(null);
+		if (question == null)
+			return false;
+
+		questionRepository.delete(question);
+
+		return true;
+	}
+	
+	public boolean deleteAnswer(String answerId, String memberId) {
+		Member member = memberRepository.findById(Long.parseLong(memberId)).orElse(null);
+		if (member == null)
+			return false;
+
+		AnswerBoard answer = answerRepository.findById(Long.parseLong(answerId)).orElse(null);
+		if (answer == null)
+			return false;
+
+		answerRepository.delete(answer);
 
 		return true;
 	}

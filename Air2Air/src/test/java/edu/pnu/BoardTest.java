@@ -1,5 +1,7 @@
 package edu.pnu;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import edu.pnu.domain.AnswerBoard;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.QuestionBoard;
+import edu.pnu.domain.QuestionType;
 import edu.pnu.persistence.AnswerBoardRepository;
 import edu.pnu.persistence.MemberRepository;
 import edu.pnu.persistence.QuestionBoardRepository;
@@ -20,17 +23,24 @@ public class BoardTest {
 	@Autowired
 	public MemberRepository memberRepo;
 	
-//	@Test
+	@Test
 	public void addQuestion() {
-		Member member = memberRepo.findById(1L).get();
+		Random random = new Random();
 		
-		QuestionBoard question = QuestionBoard.builder()
-				.title("질문입니다.")
-				.content("질문입니다. 이건 왜 이렇게 되나요?")
-				.member(member)
-				.build();
-		
-		questionRepo.save(question);
+		for(int i=1; i<=100; i++) {		
+			Long id = (long) ((i % 5) + 1);
+			Member member = memberRepo.findById(id).get();
+			// 랜덤하게 questionType 선택
+	        QuestionType randomQuestionType = QuestionType.values()[random.nextInt(QuestionType.values().length)];
+			QuestionBoard question = QuestionBoard.builder()
+					.title("문의사항있습니다" + i)
+					.content("문의사항입니다. 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구")
+					.member(member)
+					.questionType(randomQuestionType)
+					.build();
+			
+			questionRepo.save(question);
+		}
 	}
 	
 	@Test
