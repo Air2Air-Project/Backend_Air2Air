@@ -14,6 +14,7 @@ import edu.pnu.ResDTO.QuestionSimpleDTO;
 import edu.pnu.domain.AnswerBoard;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.QuestionBoard;
+import edu.pnu.domain.QuestionType;
 import edu.pnu.persistence.AnswerBoardRepository;
 import edu.pnu.persistence.MemberRepository;
 import edu.pnu.persistence.QuestionBoardRepository;
@@ -80,6 +81,9 @@ public class BoardService {
 		if (question == null)
 			return false;
 
+		if(!question.getMember().equals(member))
+			return false;
+		
 		questionRepository.delete(question);
 
 		return true;
@@ -97,5 +101,21 @@ public class BoardService {
 		answerRepository.delete(answer);
 
 		return true;
+	}
+
+	public List<QuestionSimpleDTO> searchBoardList( String questionType, String searchType, String keyword) {
+		QuestionType qType = null;
+		if(!questionType.equals("문의유형"))
+			qType = QuestionBoard.stringToEnum(questionType);
+		
+//		System.out.println(searchType);
+//		System.out.println(qType);
+//		System.out.println(questionType);
+//		System.out.println(keyword);
+		
+		List<QuestionBoard> questionList = questionRepository.searchQuestions(qType, searchType, keyword);
+		List<QuestionSimpleDTO> questionDTOList = questionList.stream().map(QuestionSimpleDTO::convertToDTO)
+				.collect(Collectors.toList());
+		return questionDTOList;
 	}
 }

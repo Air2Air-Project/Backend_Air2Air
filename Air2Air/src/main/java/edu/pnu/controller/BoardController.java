@@ -31,10 +31,10 @@ public class BoardController {
 	}
 	
 	@GetMapping("/boardlist/search")
-	public ResponseEntity<?> searchBoardList( @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String questionType,
-            @RequestParam(defaultValue = "titleContent") String searchType){
-		List<QuestionSimpleDTO> questionList = boardService.searchBoardList();
+	public ResponseEntity<?> searchBoardList( @RequestParam(required = false) String questionType,
+            @RequestParam(required = false, defaultValue = "titleContent") String searchType,
+            @RequestParam(required = false) String keyword){
+		List<QuestionSimpleDTO> questionList = boardService.searchBoardList(questionType, searchType, keyword);
 		
 		return ResponseEntity.ok(questionList);
 	}
