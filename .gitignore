@@ -61,5 +61,6 @@ build/
 
 # Ignore the application-API-KEY.properties file
 application-API-KEY.properties
+application.properties
 
 
