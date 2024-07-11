@@ -45,5 +45,6 @@ public class AnswerBoard {
 	
 	@OneToOne
 	@JoinColumn(name = "question_board_id")
+	@ToString.Exclude
 	private QuestionBoard questionBoard;
 }

@@ -23,7 +23,7 @@ public class BoardTest {
 	@Autowired
 	public MemberRepository memberRepo;
 	
-	@Test
+//	@Test
 	public void addQuestion() {
 		Random random = new Random();
 		
@@ -43,7 +43,7 @@ public class BoardTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void addAnswer() {
 		Member member = memberRepo.findById(2L).get();
 		QuestionBoard question = questionRepo.findById(3L).get();
@@ -55,5 +55,12 @@ public class BoardTest {
 				.build();
 		
 		answerRepo.save(answer);
+	}
+	
+	@Test
+	public void getQuestionArticle() {
+		QuestionBoard question = questionRepo.findById(3L).get();
+		
+		System.out.println(question);
 	}
 }

@@ -2,15 +2,19 @@ package edu.pnu.domain;
 
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -56,10 +60,22 @@ public class QuestionBoard {
 	@Builder.Default
 	private QuestionType questionType = QuestionType.ETC;
 	
+	@OneToOne(mappedBy = "questionBoard", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@OrderBy("seq asc")
+	private AnswerBoard answer;
+	
 	public static QuestionType stringToEnum(String type) {
 		QuestionType qtype = type.equals("관측소") ? QuestionType.STATION
 				: type.equals("알람") ? QuestionType.ALERT
 				: type.equals("미세먼지") ? QuestionType.DUST : QuestionType.ETC;
+		
+		return qtype;
+	}
+	
+	public static String enumToString(QuestionType type) {
+		String qtype = type.equals(QuestionType.STATION) ? "관측소" 
+				: type.equals(QuestionType.ETC) ? "기타"
+				: type.equals(QuestionType.ALERT) ? "알람" : "미세먼지";
 		
 		return qtype;
 	}

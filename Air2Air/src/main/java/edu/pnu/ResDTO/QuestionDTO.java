@@ -3,28 +3,38 @@ package edu.pnu.ResDTO;
 import java.util.Date;
 
 import edu.pnu.domain.QuestionBoard;
-import edu.pnu.domain.QuestionType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-public class QuestionSimpleDTO {
-	private Long seq;
+@NoArgsConstructor
+@AllArgsConstructor
+public class QuestionDTO {
 	private String questionType;
 	private String title;
+	private String content;
 	private String writer;
 	private Date createdDate;
+	private AnswerDTO answer;
 	
-	public static QuestionSimpleDTO convertToDTO(QuestionBoard question) {
-		String type = QuestionBoard.enumToString(question.getQuestionType());
+	public static QuestionDTO convertToDTO(QuestionBoard question) {
+		if(question == null)
+			return null;
 		
-		QuestionSimpleDTO dto = QuestionSimpleDTO.builder()
-    			.seq(question.getSeq())
+		String type = QuestionBoard.enumToString(question.getQuestionType());
+
+		AnswerDTO answerDTO = AnswerDTO.convertToDTO(question.getAnswer());
+		
+		QuestionDTO dto = QuestionDTO.builder()
     			.questionType(type)
     			.title(question.getTitle())
+    			.content(question.getContent())
     			.writer(question.getMember().getUsername())
     			.createdDate(question.getCreatedDate())
+    			.answer(answerDTO)
     			.build();
         
     	return dto;

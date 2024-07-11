@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.pnu.ReqDTO.QuestionFormDTO;
+import edu.pnu.ResDTO.QuestionDTO;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.QuestionBoard;
-import edu.pnu.persistence.AnswerBoardRepository;
 import edu.pnu.persistence.MemberRepository;
 import edu.pnu.persistence.QuestionBoardRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class QuestionService {
@@ -49,5 +50,13 @@ public class QuestionService {
 		questionRepository.delete(question);
 
 		return true;
+	}
+
+	public QuestionDTO getQuestionDetail(Long questionId) {
+		QuestionBoard question = questionRepository.findById(questionId)
+				.orElse(null);
+		QuestionDTO questionDetail = QuestionDTO.convertToDTO(question);
+		
+		return questionDetail;
 	}
 }
