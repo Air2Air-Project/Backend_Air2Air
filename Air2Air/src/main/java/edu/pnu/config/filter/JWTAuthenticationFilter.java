@@ -17,7 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.pnu.ResDTO.MemberDTO;
 import edu.pnu.domain.Member;
+import edu.pnu.domain.Region;
 import edu.pnu.persistence.MemberRepository;
+import edu.pnu.persistence.RegionRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	// 인증 객체
 	private final AuthenticationManager authenticationManager;
 	private final MemberRepository memberRepository;
+	private final RegionRepository regionRepository;
 	
 	// POST/Login 요청이 왔을 때 인증을 시도하는 메소드
 	@Override
@@ -71,10 +74,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader("Authorization", "Bearer " + token);
 		
 		Member member = memberRepository.findByEmail(user.getUsername()).get();
+		Region region = regionRepository.findById(member.getRegion().getRegionId()).get();
 		MemberDTO memberDTO = MemberDTO.builder()
 				.memberId(member.getMemberId().toString())
 				.username(member.getUsername())
 				.role(member.getRole())
+				.stationName(region.getStationName())
 				.build();
 		
 		// 응답 본문에 닉네임 정보를 JSON 형식으로 추가

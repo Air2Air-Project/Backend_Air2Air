@@ -14,6 +14,7 @@ public class QuestionSimpleDTO {
 	private String questionType;
 	private String title;
 	private String writer;
+	private boolean isAnswered;
 	private Date createdDate;
 	
 	public static QuestionSimpleDTO convertToDTO(QuestionBoard question) {
@@ -24,6 +25,7 @@ public class QuestionSimpleDTO {
     			.questionType(type)
     			.title(question.getTitle())
     			.writer(question.getMember().getUsername())
+    			.isAnswered(question.isAnswered())
     			.createdDate(question.getCreatedDate())
     			.build();
         

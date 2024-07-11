@@ -14,7 +14,7 @@ public class MemberTest {
 	@Autowired
 	public MemberRepository memberRepo;
 	
-	@Test
+//	@Test
 	public void addMember() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -43,7 +43,7 @@ public class MemberTest {
 		memberRepo.save(mem);
 	}
 	
-//	@Test
+	@Test
 	public void findByEmail() {		
 		Member mem = memberRepo.findByEmail("test@gmail.com").get();
 		System.out.println(mem);

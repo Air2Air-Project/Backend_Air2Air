@@ -15,6 +15,7 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import edu.pnu.config.filter.JWTAuthenticationFilter;
 import edu.pnu.config.filter.JWTAuthorizationFilter;
 import edu.pnu.persistence.MemberRepository;
+import edu.pnu.persistence.RegionRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +24,8 @@ public class SecurityConfig {
 	private AuthenticationConfiguration authenticationConfiguration;
 	@Autowired
 	private MemberRepository memberRepository;
+	@Autowired
+	private RegionRepository regionRepository;
 	
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -41,7 +44,7 @@ public class SecurityConfig {
 		
 		http.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
-		http.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), memberRepository));
+		http.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), memberRepository, regionRepository));
 		 // 스프링 시큐리티가 등록한 필터들 중에서 AuthorizationFilter 앞에 앞에서 작성한 필터를 삽입한다.
 		http.addFilterBefore(new JWTAuthorizationFilter(memberRepository), AuthorizationFilter.class);
 		return http.build();
