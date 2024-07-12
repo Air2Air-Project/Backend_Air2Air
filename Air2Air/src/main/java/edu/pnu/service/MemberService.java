@@ -15,9 +15,9 @@ public class MemberService {
 	MemberRepository memberRepository;
 	@Autowired
 	RegionRepository regionRepository;
-	
 	@Autowired
 	PasswordEncoder encoder;
+	
 	public Member addMember(Member member) {
 		Region regiRegion = member.getRegion();
 		Region region = regionRepository.findByLargeAndMiddleAndSmall(
@@ -32,4 +32,14 @@ public class MemberService {
 		member.setPassword(encoder.encode(member.getPassword()));
 		return memberRepository.save(member);
 	}
+
+	public boolean checkEmail(Member member) {
+		return memberRepository.findByEmail(member.getEmail()).isPresent();
+	}
+
+	public boolean checkUsername(Member member) {
+		return memberRepository.findByUsername(member.getUsername()).isPresent();
+	}
+	
+	
 }

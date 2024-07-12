@@ -25,4 +25,18 @@ public class MemberController {
 			return ResponseEntity.ok("회원가입 성공");
 		
 	}
+	
+	@PostMapping("/checkEmail")
+	public ResponseEntity<?> checkEmail(@RequestBody Member member){
+		boolean result = memberService.checkEmail(member);
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping("/checkUsername")
+	public ResponseEntity<?> checkUsername(@RequestBody Member member){
+		boolean result = memberService.checkUsername(member);
+		
+		return ResponseEntity.ok(result);
+	}
 }

@@ -49,6 +49,6 @@ public class Member {
     @JoinColumn(name = "region_id")
     private Region region;
 	
-	@Column(name="phone_number", nullable = false)
+	@Column(name="phone_number", nullable = false, unique = true)
 	private String phoneNumber;
 }
