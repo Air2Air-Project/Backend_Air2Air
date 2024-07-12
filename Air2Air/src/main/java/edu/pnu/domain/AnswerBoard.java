@@ -49,4 +49,8 @@ public class AnswerBoard {
 	@JoinColumn(name = "question_board_id")
 	@ToString.Exclude
 	private QuestionBoard questionBoard;
+	
+	public void updateQuestion(AnswerBoard question) {
+		this.setContent(question.getContent());
+    }
 }

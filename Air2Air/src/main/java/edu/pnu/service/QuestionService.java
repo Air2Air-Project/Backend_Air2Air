@@ -18,19 +18,14 @@ public class QuestionService {
 	@Autowired
 	MemberRepository memberRepository;
 
-	public boolean addQuestion(QuestionFormDTO question) {
-		Member member = memberRepository.findById(Long.parseLong(question.getMemberId())).orElse(null);
+	public boolean addQuestion(QuestionBoard question) {
+		Member member = memberRepository.findById(question.getMember().getMemberId()).orElse(null);
 
 		if (member == null)
 			return false;
-
-		QuestionBoard questionBoard = QuestionBoard.builder()
-									.member(member).title(question.getTitle())
-									.content(question.getContent())
-									.questionType(QuestionBoard.stringToEnum(question.getType()))
-									.build();
-
-		questionRepository.save(questionBoard);
+		
+		question.setMember(member);
+		questionRepository.save(question);
 
 		return true;
 	}
@@ -44,7 +39,7 @@ public class QuestionService {
 		if (question == null)
 			return false;
 
-		if(!question.getMember().equals(member))
+		if(!question.getMember().getMemberId().equals(member.getMemberId()))
 			return false;
 		
 		questionRepository.delete(question);
@@ -60,12 +55,34 @@ public class QuestionService {
 		return questionDetail;
 	}
 
-	public QuestionFormDTO getModifyQuestion(Long questionId) {
-		QuestionBoard question = questionRepository.findById(questionId)
+	public QuestionFormDTO getModifyQuestion(String questionId, String memberId) {
+		QuestionBoard question = questionRepository.findById(Long.parseLong(questionId))
 				.orElse(null);
+		if(question == null)
+			return null;
+		
+		Member member = memberRepository.findById(question.getMember().getMemberId()).orElse(null);
+		if(member == null || !member.getMemberId().equals(Long.parseLong(memberId)))
+			return null;
 		
 		QuestionFormDTO questionForm = QuestionFormDTO.convertToDTO(question);
 		
 		return questionForm;
+	}
+
+	public boolean updateQuestion(QuestionBoard question) {
+		Member member = memberRepository.findById(question.getMember().getMemberId()).orElse(null);
+		if(member == null)
+			return false;
+		
+		QuestionBoard questionBoard = questionRepository.findById(question.getSeq()).orElse(null);
+		if(questionBoard == null || 
+				!questionBoard.getMember().getMemberId().equals(question.getMember().getMemberId()))
+			return false;
+		
+		questionBoard.updateQuestion(question);
+		questionRepository.save(questionBoard);
+		
+		return true;
 	}
 }

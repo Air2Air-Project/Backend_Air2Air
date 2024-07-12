@@ -22,6 +22,7 @@ public class AirDTO {
 	private String pm25Grade;
 	private String pm10Value;
 	private String pm10Grade;
+	private String stationName;
 	
 	public static AirDTO convertToDTO(AirApiResDTO air) {
 		AirDTO dto = AirDTO.builder()

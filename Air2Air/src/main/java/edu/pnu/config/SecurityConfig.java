@@ -36,8 +36,9 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf->csrf.disable());	// CSRF 보호 비활성화
 	
-		http.authorizeHttpRequests(auth->auth
-				.anyRequest().permitAll());
+		 http.authorizeHttpRequests(auth->auth
+				 .requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
+				 .anyRequest().permitAll());
 		
 		http.formLogin(frmLogin->frmLogin.disable());
 		http.httpBasic(basic->basic.disable());

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDTO {
+	private String seq;
 	private String questionType;
 	private String title;
 	private String content;
@@ -29,6 +30,7 @@ public class QuestionDTO {
 		AnswerDTO answerDTO = AnswerDTO.convertToDTO(question.getAnswer());
 		
 		QuestionDTO dto = QuestionDTO.builder()
+				.seq(question.getSeq().toString())
     			.questionType(type)
     			.title(question.getTitle())
     			.content(question.getContent())

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.pnu.ReqDTO.QuestionFormDTO;
 import edu.pnu.ResDTO.QuestionDTO;
+import edu.pnu.domain.QuestionBoard;
 import edu.pnu.service.QuestionService;
 
 @RestController
@@ -21,7 +22,7 @@ public class QuestionController {
 	QuestionService questionService;
 	
 	@PostMapping("/question/register")
-	public ResponseEntity<?> addQuestion(@RequestBody QuestionFormDTO question){
+	public ResponseEntity<?> addQuestion(@RequestBody QuestionBoard question){
 		boolean result = questionService.addQuestion(question);
 		
 		if(result)
@@ -50,10 +51,9 @@ public class QuestionController {
 			return ResponseEntity.ok(questionDetail);
 	}
 	
-	// 수정 필요
-	@GetMapping("/question/modify/{questionId}")
-	public ResponseEntity<?> getModifyQuestion(@PathVariable Long questionId){
-		QuestionFormDTO questionForm = questionService.getModifyQuestion(questionId);
+	@GetMapping("/question/modify")
+	public ResponseEntity<?> getModifyQuestion(@RequestParam String questionId, @RequestParam String memberId){
+		QuestionFormDTO questionForm = questionService.getModifyQuestion(questionId, memberId);
 		
 		if(questionForm == null)
 			return ResponseEntity.badRequest().body("잘못된 요청입니다");
@@ -61,8 +61,13 @@ public class QuestionController {
 			return ResponseEntity.ok(questionForm);
 	}
 	
-//	@PutMapping("/question/modify/update")
-//	public ResponseEntity<?> updateQuestion(@RequestBody QuestionFormDTO){
-//		
-//	}
+	@PutMapping("/question/modify/update")
+	public ResponseEntity<?> updateQuestion(@RequestBody QuestionBoard question){
+		boolean result = questionService.updateQuestion(question);
+		
+		if(!result)
+			return ResponseEntity.badRequest().body("수정 실패");
+		else
+			return ResponseEntity.ok("수정 성공");
+	}
 }

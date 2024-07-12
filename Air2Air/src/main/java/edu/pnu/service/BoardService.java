@@ -25,7 +25,7 @@ public class BoardService {
 		return questionDTOList;
 	}
 
-	public List<QuestionSimpleDTO> searchBoardList( String questionType, String searchType, String keyword) {
+	public List<QuestionSimpleDTO> searchBoardList(String questionType, String searchType, String keyword) {
 		QuestionType qType = null;
 		if(!questionType.equals("문의유형"))
 			qType = QuestionBoard.stringToEnum(questionType);

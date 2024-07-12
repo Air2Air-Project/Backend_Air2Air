@@ -48,10 +48,8 @@ public class APIService {
 		JsonNode itemsNode = root.path("response").path("body").path("items");
 		List<AirApiResDTO> items = objectMapper.readValue(itemsNode.toString(), new TypeReference<List<AirApiResDTO>>() {});
 		AirDTO airDto = AirDTO.convertToDTO(items.get(0));
-
-//		System.out.println(jsonRes);
-//		System.out.println(items.get(0));
-//		System.out.println("[응답 완료]");
+		airDto.setStationName(stationName);
+		
 		return airDto;
 	}
 	

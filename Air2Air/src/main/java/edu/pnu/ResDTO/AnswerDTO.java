@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnswerDTO {
+	private String seq;
 	private String content;
 	private String writer;
 	private Date createdDate;
@@ -22,6 +23,7 @@ public class AnswerDTO {
 			return null;
 		
 		AnswerDTO dto = AnswerDTO.builder()
+				.seq(answer.getSeq().toString())
 				.content(answer.getContent())
 				.writer(answer.getMember().getUsername())
 				.createdDate(answer.getCreatedDate())

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.pnu.ReqDTO.AnswerFormDTO;
+import edu.pnu.ReqDTO.QuestionFormDTO;
 import edu.pnu.domain.AnswerBoard;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.QuestionBoard;
@@ -20,27 +21,22 @@ public class AnswerService {
 	@Autowired
 	MemberRepository memberRepository;
 	
-	public boolean addAnswer(AnswerFormDTO answer) {
-		Member member = memberRepository.findById(Long.parseLong(answer.getMeberId())).orElse(null);
+	public boolean addAnswer(AnswerBoard answer) {
+		Member member = memberRepository.findById(answer.getMember().getMemberId()).orElse(null);
 		if (member == null)
 			return false;
 		
-		QuestionBoard question = questionRepository.findById(Long.parseLong(answer.getQuestionId())).get();
+		QuestionBoard question = questionRepository.findById(answer.getQuestionBoard().getSeq()).get();
 		if (question == null || question.isAnswered())
 			return false;
 		
-		AnswerBoard answerBoard = AnswerBoard.builder()
-								.content(answer.getContent())
-								.member(member)
-								.questionBoard(question)
-								.build();
+		answer.setMember(member);
+		answer.setQuestionBoard(question);
 								
-		answerRepository.save(answerBoard);
+		answerRepository.save(answer);
 
 		return true;
 	}
-
-
 	
 	public boolean deleteAnswer(String answerId, String memberId) {
 		Member member = memberRepository.findById(Long.parseLong(memberId)).orElse(null);
@@ -50,9 +46,43 @@ public class AnswerService {
 		AnswerBoard answer = answerRepository.findById(Long.parseLong(answerId)).orElse(null);
 		if (answer == null)
 			return false;
+		
+		if(!answer.getMember().getMemberId().equals(member.getMemberId()))
+			return false;
 
 		answerRepository.delete(answer);
 
+		return true;
+	}
+
+	public AnswerFormDTO getModifyAnswer(String answerId, String memberId) {
+		AnswerBoard answer = answerRepository.findById(Long.parseLong(answerId))
+				.orElse(null);
+		if(answer == null)
+			return null;
+		
+		Member member = memberRepository.findById(answer.getMember().getMemberId()).orElse(null);
+		if(member == null || !member.getMemberId().equals(Long.parseLong(memberId)))
+			return null;
+		
+		AnswerFormDTO questionForm = AnswerFormDTO.convertToDTO(answer);
+		
+		return questionForm;
+	}
+
+	public boolean updateAnswer(AnswerBoard answer) {
+		Member member = memberRepository.findById(answer.getMember().getMemberId()).orElse(null);
+		if(member == null)
+			return false;
+		
+		AnswerBoard answerBoard = answerRepository.findById(answer.getSeq()).orElse(null);
+		if(answerBoard == null || 
+				!answerBoard.getMember().getMemberId().equals(answer.getMember().getMemberId()))
+			return false;
+		
+		answerBoard.updateQuestion(answer);
+		answerRepository.save(answerBoard);
+		
 		return true;
 	}
 }

@@ -2,6 +2,7 @@ package edu.pnu.domain;
 
 import java.util.Date;
 
+import edu.pnu.ReqDTO.QuestionFormDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -65,9 +66,9 @@ public class QuestionBoard {
 	private AnswerBoard answer;
 	
 	public static QuestionType stringToEnum(String type) {
-		QuestionType qtype = type.equals("관측소") ? QuestionType.STATION
-				: type.equals("알람") ? QuestionType.ALERT
-				: type.equals("미세먼지") ? QuestionType.DUST : QuestionType.ETC;
+		QuestionType qtype = type.equals("STATION") ? QuestionType.STATION
+				: type.equals("ALERT") ? QuestionType.ALERT
+				: type.equals("DUST") ? QuestionType.DUST : QuestionType.ETC;
 		
 		return qtype;
 	}
@@ -79,4 +80,10 @@ public class QuestionBoard {
 		
 		return qtype;
 	}
+	
+	public void updateQuestion(QuestionBoard question) {
+		this.setTitle(question.getTitle());
+		this.setContent(question.getContent());
+		this.setQuestionType(question.getQuestionType());
+    }
 }
