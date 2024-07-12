@@ -45,6 +45,39 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@PostMapping("/user/find/id")
+	public ResponseEntity<?> findId(@RequestBody Member member){
+		System.out.println("[아이디 찾기 호출]: " + member);
+		String result = memberService.findId(member);
+		
+		if(result.equals("찾을 수 없는 회원입니다"))
+			return ResponseEntity.badRequest().body(result);
+		else
+			return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping("/user/find/password")
+	public ResponseEntity<?> findPassword(@RequestBody Member member){
+		System.out.println("[비밀번호 찾기 호출]: " + member);
+		boolean result = memberService.findPassword(member);
+		
+		if(!result)
+			return ResponseEntity.badRequest().body(result);
+		else
+			return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping("/user/change/password")
+	public ResponseEntity<?> changePassword(@RequestBody Member member){
+		System.out.println("[비밀번호 수정 호출]: " + member);
+		boolean result = memberService.changePassword(member);
+		
+		if(!result)
+			return ResponseEntity.badRequest().body(result);
+		else
+			return ResponseEntity.ok(result);
+	}
+	
 	@GetMapping("/user/profile/{memberId}")
 	public ResponseEntity<?> getMemberInfo(@PathVariable String memberId){
 		MyPageDTO result = memberService.getMemberInfo(memberId);

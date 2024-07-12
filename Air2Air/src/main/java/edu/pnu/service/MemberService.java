@@ -43,6 +43,35 @@ public class MemberService {
 	public boolean checkUsername(Member member) {
 		return memberRepository.findByUsername(member.getUsername()).isPresent();
 	}
+	
+	public String findId(Member member) {
+		Member mem = memberRepository.findByPhoneNumber(member.getPhoneNumber()).orElse(null);
+
+		if (mem == null)
+			return "찾을 수 없는 회원입니다";
+		else {
+			return mem.getEmail();
+		}
+	}
+
+	public boolean findPassword(Member member) {
+		Member mem = memberRepository.findByEmailAndPhoneNumber(member.getEmail(), member.getPhoneNumber()).orElse(null);
+
+		if (mem == null)
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean changePassword(Member member) {
+		Member mem = memberRepository.findByEmailAndPhoneNumber(member.getEmail(), member.getPhoneNumber()).orElse(null);
+		if (mem == null)
+			return false;
+		
+		mem.setPassword(encoder.encode(member.getPassword()));
+		memberRepository.save(mem);
+		return true;
+	}
 
 	public MyPageDTO getMemberInfo(String memberId) {
 		Member mem = memberRepository.findById(Long.parseLong(memberId)).orElse(null);
@@ -107,6 +136,8 @@ public class MemberService {
 			return mem;
 		}
 	}
+
+	
 
 	
 	
