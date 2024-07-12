@@ -21,19 +21,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.pnu.ResDTO.AirApiResDTO;
 import edu.pnu.ResDTO.AirDTO;
+import edu.pnu.domain.Region;
+import edu.pnu.persistence.RegionRepository;
 
 @Service
 public class APIService {
+	@Autowired
+	private RegionRepository regionRepository;
 	@Autowired
 	private RestTemplate restTemplate;
 	@Value("${decode-api-key}")
 	private String decode_api_key;
 	
+	
 	public AirDTO getAirAPI(String stationName) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "JSON", Charset.forName("UTF-8")));
 		URI uri = createAirURI(stationName);
-		System.out.println(stationName);
+//		System.out.println(stationName);
 		ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
 		String jsonRes = response.getBody();
 
@@ -44,12 +49,21 @@ public class APIService {
 		List<AirApiResDTO> items = objectMapper.readValue(itemsNode.toString(), new TypeReference<List<AirApiResDTO>>() {});
 		AirDTO airDto = AirDTO.convertToDTO(items.get(0));
 
-		System.out.println(jsonRes);
-		System.out.println(items.get(0));
-		System.out.println("[응답 완료]");
-
-
+//		System.out.println(jsonRes);
+//		System.out.println(items.get(0));
+//		System.out.println("[응답 완료]");
 		return airDto;
+	}
+	
+	public AirDTO getAirAPI(String large, String middle, String small) throws Exception {
+		Region region = regionRepository.findByLargeAndMiddleAndSmall(large, middle, small).orElse(null);
+		
+		if(region == null)
+			return null;
+		
+		System.out.println(region.getStationName());
+		
+		return getAirAPI(region.getStationName());
 	}
 	
 	public URI createAirURI(String stationName) throws UnsupportedEncodingException, URISyntaxException {
@@ -67,4 +81,6 @@ public class APIService {
 		builder.append("&" + URLEncoder.encode("ver", "UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8"));
 		return new URI(builder.toString());
 	}
+
+	
 }

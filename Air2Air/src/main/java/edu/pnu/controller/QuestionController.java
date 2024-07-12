@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,4 +49,20 @@ public class QuestionController {
 		else
 			return ResponseEntity.ok(questionDetail);
 	}
+	
+	// 수정 필요
+	@GetMapping("/question/modify/{questionId}")
+	public ResponseEntity<?> getModifyQuestion(@PathVariable Long questionId){
+		QuestionFormDTO questionForm = questionService.getModifyQuestion(questionId);
+		
+		if(questionForm == null)
+			return ResponseEntity.badRequest().body("잘못된 요청입니다");
+		else
+			return ResponseEntity.ok(questionForm);
+	}
+	
+//	@PutMapping("/question/modify/update")
+//	public ResponseEntity<?> updateQuestion(@RequestBody QuestionFormDTO){
+//		
+//	}
 }

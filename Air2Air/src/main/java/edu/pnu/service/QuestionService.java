@@ -59,4 +59,13 @@ public class QuestionService {
 		
 		return questionDetail;
 	}
+
+	public QuestionFormDTO getModifyQuestion(Long questionId) {
+		QuestionBoard question = questionRepository.findById(questionId)
+				.orElse(null);
+		
+		QuestionFormDTO questionForm = QuestionFormDTO.convertToDTO(question);
+		
+		return questionForm;
+	}
 }
