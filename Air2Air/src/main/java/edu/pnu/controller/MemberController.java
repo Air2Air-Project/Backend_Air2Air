@@ -88,8 +88,9 @@ public class MemberController {
 	}
 	
 	@PutMapping("/user/profile")
-	public ResponseEntity<?> updateMemberInfo(@RequestBody Member Member){
-		MemberDTO result = memberService.updateMemberInfo(Member);
+	public ResponseEntity<?> updateMemberInfo(@RequestBody Member member){
+		System.out.println(member);
+		MemberDTO result = memberService.updateMemberInfo(member);
 		if(result == null)
 			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
 		else

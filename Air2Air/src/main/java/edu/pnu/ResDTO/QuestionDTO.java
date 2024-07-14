@@ -18,6 +18,7 @@ public class QuestionDTO {
 	private String title;
 	private String content;
 	private String writer;
+	private MemberIdDTO member;
 	private Date createdDate;
 	private AnswerDTO answer;
 	
@@ -28,6 +29,9 @@ public class QuestionDTO {
 		String type = QuestionBoard.enumToString(question.getQuestionType());
 
 		AnswerDTO answerDTO = AnswerDTO.convertToDTO(question.getAnswer());
+		MemberIdDTO memberDTO = MemberIdDTO.builder()
+				.memberId(question.getMember().getMemberId().toString())
+				.build();
 		
 		QuestionDTO dto = QuestionDTO.builder()
 				.seq(question.getSeq().toString())
@@ -35,6 +39,7 @@ public class QuestionDTO {
     			.title(question.getTitle())
     			.content(question.getContent())
     			.writer(question.getMember().getUsername())
+    			.member(memberDTO)
     			.createdDate(question.getCreatedDate())
     			.answer(answerDTO)
     			.build();

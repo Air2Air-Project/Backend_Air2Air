@@ -38,6 +38,8 @@ public class SecurityConfig {
 	
 		 http.authorizeHttpRequests(auth->auth
 				 .requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
+				 .requestMatchers("/answer/**").hasAnyRole("ADMIN")
+				 .requestMatchers("/question/**").hasAnyRole("USER", "ADMIN")
 				 .anyRequest().permitAll());
 		
 		http.formLogin(frmLogin->frmLogin.disable());

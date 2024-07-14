@@ -47,13 +47,6 @@ public class QuestionService {
 		return true;
 	}
 
-	public QuestionDTO getQuestionDetail(Long questionId) {
-		QuestionBoard question = questionRepository.findById(questionId)
-				.orElse(null);
-		QuestionDTO questionDetail = QuestionDTO.convertToDTO(question);
-		
-		return questionDetail;
-	}
 
 	public QuestionFormDTO getModifyQuestion(String questionId, String memberId) {
 		QuestionBoard question = questionRepository.findById(Long.parseLong(questionId))

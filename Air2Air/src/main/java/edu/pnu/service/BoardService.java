@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import edu.pnu.ResDTO.QuestionDTO;
 import edu.pnu.ResDTO.QuestionSimpleDTO;
 import edu.pnu.domain.QuestionBoard;
 import edu.pnu.domain.QuestionType;
@@ -40,4 +41,13 @@ public class BoardService {
 				.collect(Collectors.toList());
 		return questionDTOList;
 	}
+	
+	public QuestionDTO getQuestionDetail(Long questionId) {
+		QuestionBoard question = questionRepository.findById(questionId)
+				.orElse(null);
+		QuestionDTO questionDetail = QuestionDTO.convertToDTO(question);
+		
+		return questionDetail;
+	}
+
 }

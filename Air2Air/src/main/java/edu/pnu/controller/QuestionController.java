@@ -41,15 +41,7 @@ public class QuestionController {
 			return ResponseEntity.badRequest().body("삭제 실패");
 	}
 	
-	@GetMapping("/question/detail/{questionId}")
-	public ResponseEntity<?> getQuestionDetail(@PathVariable Long questionId){
-		QuestionDTO questionDetail = questionService.getQuestionDetail(questionId);
-		
-		if(questionDetail == null)
-			return ResponseEntity.badRequest().body("잘못된 요청입니다");
-		else
-			return ResponseEntity.ok(questionDetail);
-	}
+	
 	
 	@GetMapping("/question/modify")
 	public ResponseEntity<?> getModifyQuestion(@RequestParam String questionId, @RequestParam String memberId){
