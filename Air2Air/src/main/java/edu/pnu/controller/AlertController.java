@@ -47,9 +47,9 @@ public class AlertController {
 		return ResponseEntity.ok(alertList);
 	}
 	
-	@GetMapping("/alert/{alertType}")
+	@GetMapping("/alertSelect/{alertType}/{stationName}")
 	private ResponseEntity<?> getRegionAlert(@PathVariable AlertType alertType,
-			@RequestParam(required = false)String stationName){
+			@PathVariable(required = false)String stationName){
 		List<Alert> alertList = alertService.getRegionAlert(alertType, stationName);
 		
 		return ResponseEntity.ok(alertList);
