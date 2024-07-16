@@ -1,4 +1,4 @@
-package edu.pnu.ResDTO;
+package edu.pnu.DTO;
 
 import lombok.Builder;
 import lombok.Data;

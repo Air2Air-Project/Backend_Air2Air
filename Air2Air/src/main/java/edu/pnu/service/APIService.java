@@ -19,8 +19,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.pnu.ResDTO.AirApiResDTO;
-import edu.pnu.ResDTO.AirDTO;
+import edu.pnu.DTO.AirApiResDTO;
+import edu.pnu.DTO.AirDTO;
 import edu.pnu.domain.Region;
 import edu.pnu.persistence.RegionRepository;
 
@@ -41,6 +41,7 @@ public class APIService {
 //		System.out.println(stationName);
 		ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
 		String jsonRes = response.getBody();
+		System.out.println(jsonRes);
 
 		// ObjectMapper로 JSON 문자열을 객체로 받아오기
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -49,6 +50,7 @@ public class APIService {
 		List<AirApiResDTO> items = objectMapper.readValue(itemsNode.toString(), new TypeReference<List<AirApiResDTO>>() {});
 		AirDTO airDto = AirDTO.convertToDTO(items.get(0));
 		airDto.setStationName(stationName);
+		System.out.println(airDto);
 		
 		return airDto;
 	}
@@ -60,6 +62,7 @@ public class APIService {
 			return null;
 		
 		System.out.println(region.getStationName());
+		
 		
 		return getAirAPI(region.getStationName());
 	}

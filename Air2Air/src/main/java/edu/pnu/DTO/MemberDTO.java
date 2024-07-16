@@ -1,4 +1,4 @@
-package edu.pnu.ResDTO;
+package edu.pnu.DTO;
 
 import edu.pnu.domain.Role;
 import lombok.Builder;

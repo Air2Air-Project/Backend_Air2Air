@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.pnu.ResDTO.QuestionDTO;
-import edu.pnu.ResDTO.QuestionSimpleDTO;
+import edu.pnu.DTO.QuestionDTO;
+import edu.pnu.DTO.QuestionSimpleDTO;
 import edu.pnu.service.BoardService;
 
 @RestController

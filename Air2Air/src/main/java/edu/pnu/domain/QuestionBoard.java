@@ -2,7 +2,7 @@ package edu.pnu.domain;
 
 import java.util.Date;
 
-import edu.pnu.ReqDTO.QuestionFormDTO;
+import edu.pnu.DTO.QuestionFormDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

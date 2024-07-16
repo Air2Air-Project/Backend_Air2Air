@@ -12,8 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import edu.pnu.ResDTO.QuestionDTO;
-import edu.pnu.ResDTO.QuestionSimpleDTO;
+import edu.pnu.DTO.QuestionDTO;
+import edu.pnu.DTO.QuestionSimpleDTO;
 import edu.pnu.domain.QuestionBoard;
 import edu.pnu.domain.QuestionType;
 import edu.pnu.persistence.QuestionBoardRepository;

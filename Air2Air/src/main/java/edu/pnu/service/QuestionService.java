@@ -3,8 +3,8 @@ package edu.pnu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.pnu.ReqDTO.QuestionFormDTO;
-import edu.pnu.ResDTO.QuestionDTO;
+import edu.pnu.DTO.QuestionDTO;
+import edu.pnu.DTO.QuestionFormDTO;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.QuestionBoard;
 import edu.pnu.persistence.MemberRepository;

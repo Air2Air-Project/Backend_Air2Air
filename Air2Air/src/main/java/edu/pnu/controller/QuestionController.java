@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.pnu.ReqDTO.QuestionFormDTO;
-import edu.pnu.ResDTO.QuestionDTO;
+import edu.pnu.DTO.QuestionDTO;
+import edu.pnu.DTO.QuestionFormDTO;
 import edu.pnu.domain.QuestionBoard;
 import edu.pnu.service.QuestionService;
 

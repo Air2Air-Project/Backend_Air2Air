@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import edu.pnu.ResDTO.MemberDTO;
-import edu.pnu.ResDTO.MyPageDTO;
-import edu.pnu.ResDTO.RegionDTO;
+import edu.pnu.DTO.MemberDTO;
+import edu.pnu.DTO.MyPageDTO;
+import edu.pnu.DTO.RegionDTO;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.Region;
 import edu.pnu.persistence.MemberRepository;

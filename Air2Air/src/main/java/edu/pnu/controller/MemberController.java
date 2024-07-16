@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.pnu.ResDTO.MemberDTO;
-import edu.pnu.ResDTO.MyPageDTO;
+import edu.pnu.DTO.MemberDTO;
+import edu.pnu.DTO.MyPageDTO;
 import edu.pnu.domain.Member;
 import edu.pnu.service.MemberService;
 

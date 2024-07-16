@@ -1,4 +1,4 @@
-package edu.pnu.ReqDTO;
+package edu.pnu.DTO;
 
 import edu.pnu.domain.QuestionBoard;
 import lombok.Builder;
