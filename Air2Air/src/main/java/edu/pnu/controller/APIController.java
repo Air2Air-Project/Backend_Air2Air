@@ -25,4 +25,17 @@ public class APIController {
 		
 		return ResponseEntity.ok(apiService.getAirAPI(large, middle, small));
 	}
+	
+	@GetMapping("/getWeatherInfo")
+	public ResponseEntity<?> getWeatherAPI(@RequestParam String stationName) throws Exception{
+		return ResponseEntity.ok(apiService.getWindAPI(stationName));
+	}
+	
+	@GetMapping("/getWeatherInfo/select")
+	public ResponseEntity<?> getWeatherAPI(@RequestParam(required = false, defaultValue = "창원시")String large, 
+			@RequestParam(required = false, defaultValue = "마산합포구") String middle, 
+			@RequestParam(required = false, defaultValue = "진동면 삼진의거대로 621") String small) throws Exception{
+		
+		return ResponseEntity.ok(apiService.getWindAPI(large, middle, small));
+	}
 }

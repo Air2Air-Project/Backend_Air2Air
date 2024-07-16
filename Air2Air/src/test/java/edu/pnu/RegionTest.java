@@ -15,7 +15,7 @@ public class RegionTest {
 	@Autowired
 	public RegionRepository regionRepo;
 	
-//	@Test
+	@Test
 	public void getRegion() {
 		List<Region> list = regionRepo.findAll();
 		
@@ -24,7 +24,7 @@ public class RegionTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void findByLargeMiddleSmall() {
 		Region region = regionRepo.findByLargeAndMiddleAndSmall("창원시", "마산합포구", "진동면 삼진의거대로 621").orElse(null);
 		

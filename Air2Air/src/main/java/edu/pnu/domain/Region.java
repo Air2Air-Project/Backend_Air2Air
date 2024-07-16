@@ -36,4 +36,10 @@ public class Region {
 	
 	@Column(name="station_name", nullable = false)
 	private String stationName;
+	
+	@Column(nullable = false)
+	private String dmX;
+	
+	@Column(nullable = false)
+	private String dmY;
 }
