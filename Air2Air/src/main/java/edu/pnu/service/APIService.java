@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,15 +35,16 @@ public class APIService {
 	private RestTemplate restTemplate;
 	@Value("${decode-api-key}")
 	private String decode_api_key;
-	@Value("${weather-api-key}")
-	private String weather_api_key;
+	@Value("${wind-api-key}")
+	private String wind_api_key;
 	
 	
-	public AirDTO getAirAPI(String stationName) throws Exception {
-		return getAirData(stationName);
+	public AirDTO getAirAPI(String stationName, String dataTerm) throws Exception {
+		
+		return getAirData(stationName, dataTerm);
 	}
 	
-	public AirDTO getAirAPI(String large, String middle, String small) throws Exception {
+	public AirDTO getAirAPI(String large, String middle, String small, String dataTerm) throws Exception {		
 		Region region = regionRepository.findByLargeAndMiddleAndSmall(large, middle, small).orElse(null);
 		
 		if(region == null) {
@@ -50,7 +53,7 @@ public class APIService {
 			return null;
 		}
 		
-		return getAirData(region.getStationName());
+		return getAirData(region.getStationName(), dataTerm);
 	}
 
 	public WindDTO getWindAPI(String stationName) throws Exception {
@@ -77,16 +80,22 @@ public class APIService {
 		return getWindData(region);
 	}
 	
-	public AirDTO getAirData(String stationName) throws Exception {
+	public AirDTO getAirData(String stationName, String dataTerm) throws Exception {
 		System.out.println(stationName);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "JSON", Charset.forName("UTF-8")));
-		URI uri = createAirURI(stationName);
+		URI uri = createAirURI(stationName, dataTerm);
 		
 		ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
 		String jsonRes = response.getBody();
 		System.out.println(jsonRes);
-
+		
+		AirDTO airDto = ResToAirDTO(jsonRes);
+		airDto.setStationName(stationName);
+		return airDto;
+	}
+	
+	public AirDTO ResToAirDTO(String jsonRes) throws Exception {
 		// ObjectMapper로 JSON 문자열을 객체로 받아오기
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode root = objectMapper.readTree(jsonRes);
@@ -94,7 +103,7 @@ public class APIService {
 		
 		List<AirApiResDTO> items = objectMapper.readValue(itemsNode.toString(), new TypeReference<List<AirApiResDTO>>() {});
 		AirDTO airDto = AirDTO.convertToDTO(items.get(0));
-		airDto.setStationName(stationName);
+		
 		System.out.println(airDto);
 		
 		return airDto;
@@ -110,8 +119,8 @@ public class APIService {
 		ObjectMapper objectMapper = new ObjectMapper();
 	    ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
         String jsonRes = response.getBody();
-//        System.out.println(jsonRes);
-
+        System.out.println(jsonRes);
+        
         // ObjectMapper로 JSON 문자열을 객체로 받아오기
         JsonNode root = objectMapper.readTree(jsonRes);
         JsonNode wind = root.path("wind");
@@ -124,7 +133,7 @@ public class APIService {
         return windDTO;
 	}
 	
-	public URI createAirURI(String stationName) throws UnsupportedEncodingException, URISyntaxException {
+	public URI createAirURI(String stationName, String dataTerm) throws UnsupportedEncodingException, URISyntaxException {
 		String url = "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty";
 		String serviceKey = decode_api_key;
 		String encodedServiceKey;
@@ -132,17 +141,17 @@ public class APIService {
 		StringBuilder builder = new StringBuilder(url);
 		builder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + encodedServiceKey);
 		builder.append("&" + URLEncoder.encode("returnType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
-		builder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("100", "UTF-8"));
+		builder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8"));
 		builder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
 		builder.append("&" + URLEncoder.encode("stationName", "UTF-8") + "=" + URLEncoder.encode(stationName, "UTF-8"));
-		builder.append("&" + URLEncoder.encode("dataTerm", "UTF-8") + "=" + URLEncoder.encode("DAILY", "UTF-8"));
+		builder.append("&" + URLEncoder.encode("dataTerm", "UTF-8") + "=" + URLEncoder.encode(dataTerm, "UTF-8"));
 		builder.append("&" + URLEncoder.encode("ver", "UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8"));
 		return new URI(builder.toString());
 	}
 	
 	public URI createWeatherURI(String dmX, String dmY) throws UnsupportedEncodingException, URISyntaxException {
 		String url = "https://api.openweathermap.org/data/2.5/weather";
-		String serviceKey = weather_api_key;
+		String serviceKey = wind_api_key;
 		String encodedServiceKey;
 		encodedServiceKey = URLEncoder.encode(serviceKey, "UTF-8");
 		StringBuilder builder = new StringBuilder(url);
