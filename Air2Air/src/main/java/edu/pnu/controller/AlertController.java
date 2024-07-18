@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.pnu.DTO.AlertDTO;
 import edu.pnu.domain.Alert;
 import edu.pnu.domain.AlertType;
 import edu.pnu.service.AlertService;
@@ -32,25 +33,28 @@ public class AlertController {
 	
 	@GetMapping("/alertAll/{alertType}")
 	private ResponseEntity<?> getAllAlert(@PathVariable AlertType alertType){
-		List<Alert> alertList = alertService.getAllAlert(alertType);
+		List<AlertDTO> alertList = alertService.getAllAlert(alertType);
 		
 		return ResponseEntity.ok(alertList);
 	}
 	
 	@GetMapping("/alertSelect/{alertType}")
 	private ResponseEntity<?> getSelectRegionAlert(@PathVariable AlertType alertType,
-			@RequestParam(required = false, defaultValue = "창원시")String large, 
-			@RequestParam(required = false, defaultValue = "마산합포구") String middle, 
-			@RequestParam(required = false, defaultValue = "진동면 삼진의거대로 621") String small){
-		List<Alert> alertList = alertService.getSelectRegionAlert(alertType, large, middle, small);
+			@RequestParam(required = true, defaultValue = "창원시")String large, 
+			@RequestParam(required = true, defaultValue = "마산합포구") String middle, 
+			@RequestParam(required = true, defaultValue = "진동면 삼진의거대로 621") String small){
+		
+		System.out.println("요청: " + large + middle + small);
+		List<AlertDTO> alertList = alertService.getSelectRegionAlert(alertType, large, middle, small);
 		
 		return ResponseEntity.ok(alertList);
 	}
 	
 	@GetMapping("/alertSelect/{alertType}/{stationName}")
 	private ResponseEntity<?> getRegionAlert(@PathVariable AlertType alertType,
-			@PathVariable(required = false)String stationName){
-		List<Alert> alertList = alertService.getRegionAlert(alertType, stationName);
+			@PathVariable(required = true)String stationName){
+		System.out.println("요청: " + stationName);
+		List<AlertDTO> alertList = alertService.getRegionAlert(alertType, stationName);
 		
 		return ResponseEntity.ok(alertList);
 	}

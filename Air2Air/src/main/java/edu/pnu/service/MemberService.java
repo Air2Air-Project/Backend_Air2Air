@@ -22,6 +22,12 @@ public class MemberService {
 	PasswordEncoder encoder;
 	
 	public Member addMember(Member member) {
+		if(memberRepository.findByPhoneNumber(member.getPhoneNumber()).isPresent()) {			
+			System.out.println("이미 존재하는 전화번호 입니다.");
+			return null;
+		}
+		
+		
 		Region regiRegion = member.getRegion();
 		Region region = regionRepository.findByLargeAndMiddleAndSmall(
 											regiRegion.getLarge(), 

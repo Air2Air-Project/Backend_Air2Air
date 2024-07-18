@@ -14,8 +14,8 @@ public class AlertListener {
 		AppWebSocketConfig webSocketConfig = SpringContext.getBean(AppWebSocketConfig.class);
 		System.out.println(alert.toString());
 
-		String alertType = alert.getAlertType().equals(AlertType.ACTIVITY) ? "활동 자제" 
-						: "공해 조절";
+		String alertType = alert.getAlertType().equals(AlertType.CITY) ? "도시 공해" 
+						: "대기 공해";
 			
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 M월 dd일 a hh:mm");
 		String msg = alert.getRegion().getLarge() + " " + alert.getRegion().getMiddle() + " " 

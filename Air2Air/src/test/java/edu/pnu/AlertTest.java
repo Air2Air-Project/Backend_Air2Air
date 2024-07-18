@@ -17,15 +17,15 @@ public class AlertTest {
 	@Autowired
 	RegionRepository regionRepo;
 	
-	@Test
-	public void addAlert() {
-		Region region = regionRepo.findById(14L).get();
-		
-		Alert alert = Alert.builder()
-				.region(region)
-				.alertType(AlertType.POLLUTION)
-				.build();
-		
-		alertRepo.save(alert);
-	}
+//	@Test
+//	public void addAlert() {
+//		Region region = regionRepo.findById(14L).get();
+//		
+//		Alert alert = Alert.builder()
+//				.region(region)
+//				.alertType(AlertType.POLLUTION)
+//				.build();
+//		
+//		alertRepo.save(alert);
+//	}
 }

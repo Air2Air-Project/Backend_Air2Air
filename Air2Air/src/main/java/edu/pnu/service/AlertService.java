@@ -1,10 +1,12 @@
 package edu.pnu.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.pnu.DTO.AlertDTO;
 import edu.pnu.domain.Alert;
 import edu.pnu.domain.AlertType;
 import edu.pnu.domain.Region;
@@ -29,30 +31,33 @@ public class AlertService {
 		return true;
 	}
 
-	public List<Alert> getAllAlert(AlertType alertType) {
+	public List<AlertDTO> getAllAlert(AlertType alertType) {
 		List<Alert> alertList = alertRepository.findByAlertType(alertType);
-		
-		return alertList;
+		List<AlertDTO> alertDTOList = alertList.stream().map(AlertDTO::convertToDTO)
+				.collect(Collectors.toList());
+		return alertDTOList;
 	}
 
-	public List<Alert> getSelectRegionAlert(AlertType alertType, String large, String middle, String small) {
+	public List<AlertDTO> getSelectRegionAlert(AlertType alertType, String large, String middle, String small) {
 		Region region = regionRepository.findByLargeAndMiddleAndSmall(large, middle, small).orElse(null);
 		if(region == null)
 			return null;
 		
 		List<Alert> alertList = alertRepository.findByAlertTypeAndRegionRegionId(alertType, region.getRegionId());
-		
-		return alertList;
+		List<AlertDTO> alertDTOList = alertList.stream().map(AlertDTO::convertToDTO)
+				.collect(Collectors.toList());
+		return alertDTOList;
 		
 	}
 
-	public List<Alert> getRegionAlert(AlertType alertType, String stationName) {
+	public List<AlertDTO> getRegionAlert(AlertType alertType, String stationName) {
 		Region region = regionRepository.findBystationName(stationName).orElse(null);
 		if(region == null)
 			return null;
 		
 		List<Alert> alertList = alertRepository.findByAlertTypeAndRegionRegionId(alertType, region.getRegionId());
-		
-		return alertList;
+		List<AlertDTO> alertDTOList = alertList.stream().map(AlertDTO::convertToDTO)
+				.collect(Collectors.toList());
+		return alertDTOList;
 	}
 }

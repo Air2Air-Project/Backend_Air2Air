@@ -122,13 +122,36 @@ public class APIService {
         System.out.println(jsonRes);
         
         // ObjectMapper로 JSON 문자열을 객체로 받아오기
-        JsonNode root = objectMapper.readTree(jsonRes);
-        JsonNode wind = root.path("wind");
-        System.out.println(wind);
+        JsonNode root = objectMapper.readTree(jsonRes);      
+        // 필요한 정보 추출
+        JsonNode weatherNode = root.path("weather").get(0); // weather 배열의 첫 번째 요소
+        JsonNode mainNode = root.path("main");
+        JsonNode windNode = root.path("wind");
+        JsonNode rainNode = root.path("rain");
 
-		// ObjectMapper로 JSON 문자열을 객체로 받아오기
-        WindDTO windDTO = objectMapper.treeToValue(wind, WindDTO.class);
-        windDTO.setStationName(region.getStationName());
+        // WindDTO 객체 생성 및 데이터 설정
+        WindDTO windDTO = WindDTO.builder()
+                .sky(weatherNode.path("main").asText())
+                .skyDesc(weatherNode.path("description").asText())
+                .temp(mainNode.path("temp").asText())
+                .bodyTemp(mainNode.path("feels_like").asText())
+                .press(mainNode.path("pressure").asText())
+                .humidity(mainNode.path("humidity").asText())
+                .speed(windNode.path("speed").asText())
+                .deg(windNode.path("deg").asText())
+                .gust(windNode.path("gust").asText())
+                .stationName(region.getStationName())
+                .build();
+
+        // 추가적으로 rain 정보가 있을 경우 설정
+        if (rainNode != null && rainNode.has("1h")) {
+            windDTO.setRain1h(rainNode.path("1h").asText());
+        } else {
+        	windDTO.setRain1h("0");
+        }
+
+        System.out.println("Filtered WindDTO: " + windDTO);
+
 
         return windDTO;
 	}
@@ -160,6 +183,21 @@ public class APIService {
 		builder.append("&" + URLEncoder.encode("appid", "UTF-8") + "=" + encodedServiceKey);
 		builder.append("&" + URLEncoder.encode("units", "UTF-8") + "=" + URLEncoder.encode("metric", "UTF-8"));
 		builder.append("&" + URLEncoder.encode("lang", "UTF-8") + "=" + URLEncoder.encode("kr", "UTF-8"));
+		return new URI(builder.toString());
+	}
+	
+	public URI createAirAllURI() throws Exception {
+		String url = "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
+		String serviceKey = decode_api_key;
+		String encodedServiceKey;
+		encodedServiceKey = URLEncoder.encode(serviceKey, "UTF-8");
+		StringBuilder builder = new StringBuilder(url);
+		builder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + encodedServiceKey);
+		builder.append("&" + URLEncoder.encode("returnType", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
+		builder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("100", "UTF-8"));
+		builder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
+		builder.append("&" + URLEncoder.encode("sidoName", "UTF-8") + "=" + URLEncoder.encode("경남", "UTF-8"));
+		builder.append("&" + URLEncoder.encode("ver", "UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8"));
 		return new URI(builder.toString());
 	}
 

@@ -48,4 +48,8 @@ public class Alert {
 	@Enumerated(EnumType.STRING)
     @Column(name = "alert_type",nullable = false)
 	private AlertType alertType;
+	
+	@ManyToOne
+	@JoinColumn(name = "pollution_id")
+	private PollutionIndex pollution;
 }
