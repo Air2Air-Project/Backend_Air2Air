@@ -42,4 +42,24 @@ public class AirDTO {
         
     	return dto;
     }
+	
+	public static AirDTO convertToDTO(AllAirApiResDTO air) {
+		AirDTO dto = AirDTO.builder()
+				.o3Value(air.getO3Value())
+				.o3Grade(air.getO3Grade())
+				.so2Value(air.getSo2Value())
+				.so2Grade(air.getSo2Grade())
+				.no2Value(air.getNo2Value())
+				.no2Grade(air.getNo2Grade())
+				.coValue(air.getCoValue())
+				.coGrade(air.getCoGrade())
+				.pm25Value(air.getPm25Value())
+				.pm25Grade(air.getPm25Grade())
+				.pm10Value(air.getPm10Value())
+				.pm10Grade(air.getPm10Grade())
+				.stationName(air.getStationName())
+				.build();
+        
+    	return dto;
+    }
 }

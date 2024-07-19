@@ -32,7 +32,7 @@ public class APIService {
 	@Autowired
 	private RegionRepository regionRepository;
 	@Autowired
-	private RestTemplate restTemplate;
+	public RestTemplate restTemplate;
 	@Value("${decode-api-key}")
 	private String decode_api_key;
 	@Value("${wind-api-key}")

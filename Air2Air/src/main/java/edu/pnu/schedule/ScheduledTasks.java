@@ -1,16 +1,30 @@
 package edu.pnu.schedule;
 
+import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import edu.pnu.domain.Region;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.pnu.DTO.AirApiResDTO;
+import edu.pnu.DTO.AirDTO;
+import edu.pnu.DTO.AllAirApiResDTO;
 import edu.pnu.persistence.RegionRepository;
 import edu.pnu.service.APIService;
 
-@Component
+//@Compon
+@Service
 public class ScheduledTasks {
 	@Autowired
 	private APIService apiService;
@@ -18,11 +32,25 @@ public class ScheduledTasks {
 	private RegionRepository regionRepository;
 	
 	
-	@Scheduled(cron = "0 10 * * * *") 	// 매시각 50분에 호출
-	public void calculateIndex() {
+	@Scheduled(cron = "0 30 * * * *") 	// 매시각 50분에 호출
+	public List<AirDTO> calculateIndex() throws Exception {
 		System.out.println("이벤트 발생 시간: " + new java.util.Date());
+		List<AirDTO> airList = getAirData();
 		
-		
+		for(AirDTO air : airList) {
+			if(!air.getNo2Value().equals("-") || !air.getSo2Value().equals("-") || !air.getCoValue().equals("-")) {				
+				double cityPollutionIndex = calculateUrbanPollutionIndex(
+						Double.parseDouble(air.getNo2Value()),
+						Double.parseDouble(air.getSo2Value()),
+						Double.parseDouble(air.getCoValue()));
+				
+				System.out.println(air.getStationName() + " 도시공해지수: " + cityPollutionIndex);
+			}else {
+				System.out.println(air.getStationName() + " 도시공해지수: 계산불가");
+			}
+			
+		}
+		return getAirData();
 		
 	}
 	
@@ -38,7 +66,7 @@ public class ScheduledTasks {
 
     // Normalize the calculated AQI value
     public double normalize(double value, double min, double max) {
-        return (value - min) / (max - min) * 100;
+        return ((value - min) / (max - min)) * 100;
     }
 
     // Calculate AQI based on segments
@@ -74,7 +102,10 @@ public class ScheduledTasks {
         double aqiCo = calculateSegmentedAQI(co, coBreakpoints);
 
         double urbanPollutionIndex = 0.4 * aqiNo2 + 0.35 * aqiSo2 + 0.25 * aqiCo;
-        return normalize(urbanPollutionIndex, 0, 500);  // Normalize to 0-100 range
+        System.out.println("aqiNo2: " + aqiNo2 + ", aqiSo2: " + aqiSo2 + ", aqiCo: " + aqiCo);
+        // Normalize to 0-100 range
+        double normalizedUrbanPollutionIndex = normalize(urbanPollutionIndex, 0, 500);
+        return normalizedUrbanPollutionIndex;
     }
 
     // Calculate Air Quality Index with proper breakpoints
@@ -104,4 +135,23 @@ public class ScheduledTasks {
         double outdoorActivityIndex = 0.4 * urbanPollutionIndex + 0.6 * airQualityIndex;
         return normalize(outdoorActivityIndex, 0, 100);
     }
+    
+    public List<AirDTO> getAirData() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("application", "JSON", Charset.forName("UTF-8")));
+		URI uri = apiService.createAirAllURI();
+		
+		ResponseEntity<String> response = apiService.restTemplate.getForEntity(uri, String.class);
+		String jsonRes = response.getBody();
+		System.out.println(jsonRes);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode root = objectMapper.readTree(jsonRes);
+		JsonNode itemsNode = root.path("response").path("body").path("items");
+		
+		List<AllAirApiResDTO> items = objectMapper.readValue(itemsNode.toString(), new TypeReference<List<AllAirApiResDTO>>() {});
+		List<AirDTO> listDTO = items.stream().map(AirDTO::convertToDTO).collect(Collectors.toList());
+
+		return listDTO;
+	}
 }
