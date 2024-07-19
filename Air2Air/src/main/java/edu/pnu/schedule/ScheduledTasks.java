@@ -1,26 +1,15 @@
 package edu.pnu.schedule;
 
-import java.net.URI;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import edu.pnu.DTO.AirDTO;
-import edu.pnu.DTO.AllAirApiResDTO;
 import edu.pnu.domain.AirData;
 import edu.pnu.domain.PollutionIndex;
 import edu.pnu.domain.Region;
