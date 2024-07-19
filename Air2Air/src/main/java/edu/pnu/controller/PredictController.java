@@ -17,6 +17,13 @@ public class PredictController {
 	
 	@GetMapping("/request/predict")
 	public ResponseEntity<?> getPredict() throws Exception{
+		return ResponseEntity.ok(predictService.requestPredict());
+//		return ResponseEntity.ok(schedule.calculateIndex());
+		
+	}
+	
+	@GetMapping("/request/calculate")
+	public ResponseEntity<?> getCalculate() throws Exception{
 //		return ResponseEntity.ok(predictService.requestPredict());
 		return ResponseEntity.ok(schedule.calculateIndex());
 		
