@@ -31,8 +31,8 @@ public class AirPredict {
 	private Long seq;
 	
 	@ManyToOne
-	@JoinColumn(name = "request_id", nullable = false)
-	private PredictRequest request;
+	@JoinColumn(name = "region_id", nullable = false)
+	private Region region;
 	
 	@Builder.Default
 	@Column(name = "predict_time", nullable = false)
