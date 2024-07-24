@@ -32,7 +32,7 @@ public class AlertService {
 	}
 
 	public List<AlertDTO> getAllAlert(AlertType alertType) {
-		List<Alert> alertList = alertRepository.findByAlertType(alertType);
+		List<Alert> alertList = alertRepository.findByAlertTypeOrderByAlertTimeDesc(alertType);
 		List<AlertDTO> alertDTOList = alertList.stream().map(AlertDTO::convertToDTO)
 				.collect(Collectors.toList());
 		return alertDTOList;

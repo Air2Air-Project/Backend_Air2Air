@@ -1,5 +1,7 @@
 package edu.pnu.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,11 +45,33 @@ public class MemberService {
 	}
 
 	public boolean checkEmail(Member member) {
-		return memberRepository.findByEmail(member.getEmail()).isPresent();
+		Optional<Member> mem = memberRepository.findByEmail(member.getEmail());
+		boolean checkEmail = mem.isPresent();	// 있으면 true, 없으면 false
+		
+		if(checkEmail) {			
+			boolean checkDeleted = mem.get().isIsdeleted();
+			if(checkDeleted)
+				return false;
+			else
+				return true;
+		}
+		
+		return false;
 	}
 
 	public boolean checkUsername(Member member) {
-		return memberRepository.findByUsername(member.getUsername()).isPresent();
+		Optional<Member> mem = memberRepository.findByUsername(member.getUsername());
+		boolean checkUsername = mem.isPresent();	// 있으면 true, 없으면 false
+		
+		if(checkUsername) {			
+			boolean checkDeleted = mem.get().isIsdeleted();
+			if(checkDeleted)
+				return false;
+			else
+				return true;
+		}
+		
+		return false;
 	}
 	
 	public String findId(Member member) {
@@ -138,7 +162,9 @@ public class MemberService {
 		if (mem == null)
 			return null;
 		else {
-			memberRepository.delete(mem);
+			mem.setUsername("알 수 없음");
+			mem.setIsdeleted(true);
+			memberRepository.save(mem);
 			return mem;
 		}
 	}

@@ -61,6 +61,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 			}
 			
 			Member findMember = opt.get();
+			if(opt.get().isIsdeleted()) {									// 탈퇴한 회원이면
+				filterChain.doFilter(request, response);					// 필터를 그냥 통과	
+				System.out.println(opt.get().isIsdeleted());
+				return;
+			}
 			System.out.println(findMember.getRole().toString());
 			// DB에서 읽은 사용자 정보를 이용해서 UserDetails 타입의 객체를 생성
 			User user = new User(findMember.getEmail(), findMember.getPassword(),

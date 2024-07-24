@@ -20,6 +20,10 @@ public class SecurityUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Member member = memRepo.findByEmail(email)
 							.orElseThrow(()->new UsernameNotFoundException("Not Found!"));
+	
+		if (member.isIsdeleted()) {
+		    throw new UsernameNotFoundException("Not Found!");
+		}
 		
 		return new User(member.getEmail(), member.getPassword(), AuthorityUtils.createAuthorityList(member.getRole().toString()));
 	}

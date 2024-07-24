@@ -28,7 +28,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EntityListeners(AlertListener.class)
 public class Alert {
 
     @Id

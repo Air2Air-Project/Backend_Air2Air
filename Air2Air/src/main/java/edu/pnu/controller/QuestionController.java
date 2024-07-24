@@ -33,7 +33,12 @@ public class QuestionController {
 	
 	@DeleteMapping("/question/delete")
 	public ResponseEntity<?> deleteQuestion(@RequestParam String questionId, @RequestParam String memberId){
+		System.out.println("memberId: " + memberId);
+		System.out.println("questionId: " + questionId);
+		
 		boolean result = questionService.deleteQuestion(questionId, memberId);
+		
+		
 		
 		if(result)
 			return ResponseEntity.ok("삭제 성공");

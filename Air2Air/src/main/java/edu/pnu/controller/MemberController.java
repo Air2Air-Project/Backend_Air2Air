@@ -33,14 +33,14 @@ public class MemberController {
 	
 	@PostMapping("/checkEmail")
 	public ResponseEntity<?> checkEmail(@RequestBody Member member){
-		boolean result = memberService.checkEmail(member);
+		boolean result = memberService.checkEmail(member);// 있으면 true, 없으면 false
 		
 		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping("/checkUsername")
 	public ResponseEntity<?> checkUsername(@RequestBody Member member){
-		boolean result = memberService.checkUsername(member);
+		boolean result = memberService.checkUsername(member);// 있으면 true, 없으면 false
 		
 		return ResponseEntity.ok(result);
 	}

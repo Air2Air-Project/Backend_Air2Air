@@ -7,6 +7,7 @@ import edu.pnu.DTO.QuestionDTO;
 import edu.pnu.DTO.QuestionFormDTO;
 import edu.pnu.domain.Member;
 import edu.pnu.domain.QuestionBoard;
+import edu.pnu.domain.Role;
 import edu.pnu.persistence.MemberRepository;
 import edu.pnu.persistence.QuestionBoardRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,13 +35,19 @@ public class QuestionService {
 		Member member = memberRepository.findById(Long.parseLong(memberId)).orElse(null);
 		if (member == null)
 			return false;
-
+		
 		QuestionBoard question = questionRepository.findById(Long.parseLong(questionId)).orElse(null);
 		if (question == null)
 			return false;
 
-		if(!question.getMember().getMemberId().equals(member.getMemberId()))
-			return false;
+		if(member.getRole().equals(Role.ROLE_ADMIN)) {
+			questionRepository.delete(question);
+			return true;
+		}else {			
+			if(!question.getMember().getMemberId().equals(member.getMemberId()))
+				return false;
+		}
+			
 		
 		questionRepository.delete(question);
 
